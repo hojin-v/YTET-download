@@ -1,4 +1,6 @@
 const guideStack = document.querySelector("[data-guide-stack]");
+const heroTabs = document.querySelectorAll("[data-hero-tab]");
+const heroPhones = document.querySelectorAll("[data-hero-phone]");
 const latestApkLinks = document.querySelectorAll("[data-latest-apk-link]");
 const releaseStatus = document.querySelector("[data-release-status]");
 const releaseVersion = document.querySelector("[data-release-version]");
@@ -456,6 +458,19 @@ function anchorIdForStep(step, index, seenScreens) {
   return `guide-step-${index + 1}`;
 }
 
+function setHeroPreview(screenKey) {
+  heroTabs.forEach((tab) => {
+    const selected = tab.dataset.heroTab === screenKey;
+    tab.classList.toggle("active", selected);
+    tab.setAttribute("aria-selected", selected ? "true" : "false");
+  });
+
+  heroPhones.forEach((phone) => {
+    const selected = phone.dataset.heroPhone === screenKey;
+    phone.classList.toggle("is-active", selected);
+  });
+}
+
 function renderGuideStack() {
   if (!guideStack) {
     return;
@@ -492,6 +507,13 @@ function renderGuideStack() {
     .join("");
 }
 
+document.addEventListener("click", (event) => {
+  const heroTab = event.target.closest("[data-hero-tab]");
+  if (heroTab) {
+    setHeroPreview(heroTab.dataset.heroTab);
+  }
+});
+
 async function loadLatestApkRelease() {
   if (!latestApkLinks.length) {
     return;
@@ -509,7 +531,7 @@ async function loadLatestApkRelease() {
       },
     });
     if (!response.ok) {
-      throw new Error(`GitHub Releases API ${response.status}`);
+      throw new Error(`Release API ${response.status}`);
     }
     const latest = latestStableRelease(await response.json());
     const asset = latest ? stableApkAsset(latest) : null;
@@ -532,17 +554,18 @@ async function loadLatestApkRelease() {
       apkName.textContent = asset.name;
     }
     if (releaseStatus) {
-      releaseStatus.textContent = `최신 정식 릴리즈 ${latest.tag_name} · GitHub Releases에서 직접 다운로드`;
+      releaseStatus.textContent = `최신 정식 버전 ${latest.tag_name} · APK 직접 다운로드`;
     }
   } catch (error) {
     latestApkLinks.forEach((link) => {
       link.href = fallbackUrl;
     });
     if (releaseStatus) {
-      releaseStatus.textContent = "릴리즈 정보를 불러오지 못하면 현재 확인된 최신 APK 또는 GitHub Releases로 이동합니다.";
+      releaseStatus.textContent = "최신 정보를 불러오지 못하면 현재 확인된 최신 APK로 이동합니다.";
     }
   }
 }
 
+setHeroPreview(document.querySelector("[data-hero-tab].active")?.dataset.heroTab || "stream");
 renderGuideStack();
 loadLatestApkRelease();

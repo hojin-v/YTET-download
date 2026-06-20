@@ -26,8 +26,110 @@
 
     <main id="top">
       <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-bg" aria-hidden="true">
-          <div class="hero-phone hero-phone-main">
+        <div class="hero-bg" aria-label="YTET 앱 화면 미리보기">
+          <div class="hero-switcher" role="tablist" aria-label="앱 화면 선택">
+            <button type="button" class="active" data-hero-tab="stream">스트림</button>
+            <button type="button" data-hero-tab="library">내 음악</button>
+            <button type="button" data-hero-tab="extractor">추출기</button>
+          </div>
+
+          <div class="hero-phone hero-phone-stream is-active" data-hero-phone="stream">
+            <div class="phone-status"></div>
+            <div class="app-screen stream-screen">
+              <div class="stream-section">
+                <span class="stream-channel">essential;</span>
+                <span class="stream-row-inline">
+                  <span class="cover stream-essential-1"></span>
+                  <span class="mock-copy">
+                    <strong>라이즈? 그냥 느껴 | songs picked by RIIZE</strong>
+                    <small>essential; · 21시간 전</small>
+                  </span>
+                </span>
+                <span class="stream-row-inline">
+                  <span class="cover stream-essential-2"></span>
+                  <span class="mock-copy">
+                    <strong>초여름 날씨는 완전 사랑이지</strong>
+                    <small>essential; · 7일 전</small>
+                  </span>
+                </span>
+              </div>
+              <div class="stream-section">
+                <span class="stream-channel">레이백</span>
+                <span class="stream-row-inline">
+                  <span class="cover stream-layback-1"></span>
+                  <span class="mock-copy">
+                    <strong>삿포로에서 보내는 눈인사</strong>
+                    <small>레이백 · 3개월 전</small>
+                  </span>
+                </span>
+              </div>
+              <div class="mini-track">
+                <span class="cover stream-essential-1"></span>
+                <div>
+                  <strong>RIIZE PIICK</strong>
+                  <small>재생 중 · essential;</small>
+                </div>
+                <span class="playing-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              </div>
+              <div class="nav-bar">
+                <span class="active">스트림</span>
+                <span>내 음악</span>
+                <span>추출기</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-phone hero-phone-library" data-hero-phone="library">
+            <div class="phone-status"></div>
+            <div class="app-screen library-screen">
+              <div class="screen-toolbar compact-toolbar">
+                <span class="source-chip">보관함</span>
+                <span class="icon-dot" aria-label="검색"></span>
+                <span class="icon-grid" aria-label="보기 전환"></span>
+              </div>
+              <div class="chip-row">
+                <span class="active">전체</span>
+                <span>앨범</span>
+                <span>아티스트</span>
+              </div>
+              <div class="library-row">
+                <span class="cover lauv-cover"></span>
+                <span class="mock-copy">
+                  <strong>26</strong>
+                  <small>Lauv · All 4 Nothing</small>
+                </span>
+              </div>
+              <div class="library-row">
+                <span class="cover lauv-cover"></span>
+                <span class="mock-copy">
+                  <strong>Stranger</strong>
+                  <small>Lauv · All 4 Nothing</small>
+                </span>
+              </div>
+              <div class="library-row">
+                <span class="cover lauv-cover"></span>
+                <span class="mock-copy">
+                  <strong>Kids Are Born Stars</strong>
+                  <small>Lauv · All 4 Nothing</small>
+                </span>
+              </div>
+              <div class="mini-track">
+                <span class="cover lauv-cover"></span>
+                <div>
+                  <strong>26</strong>
+                  <small>재생 중 · Lauv</small>
+                </div>
+                <span class="playing-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              </div>
+              <div class="nav-bar">
+                <span>스트림</span>
+                <span class="active">내 음악</span>
+                <span>추출기</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-phone hero-phone-extractor" data-hero-phone="extractor">
             <div class="phone-status"></div>
             <div class="app-screen hero-screen">
               <div class="screen-title">추출기</div>
@@ -43,30 +145,10 @@
               <div class="check-row">전체 플레이리스트 추출</div>
               <div class="check-row on">실제 제목/아티스트 보정</div>
               <div class="cta-preview">추출</div>
-            </div>
-          </div>
-          <div class="hero-phone hero-phone-side">
-            <div class="phone-status"></div>
-            <div class="app-screen stream-screen">
-              <div class="stream-card">
-                <span>essential;</span>
-                <strong>RIIZE PIICK</strong>
-              </div>
-              <div class="stream-card">
-                <span>레이백</span>
-                <strong>삿포로에서 보내는 눈인사</strong>
-              </div>
-              <div class="mini-track">
-                <span class="cover stream-essential-1"></span>
-                <div>
-                  <strong>RIIZE PIICK</strong>
-                  <small>재생 중 · essential;</small>
-                </div>
-              </div>
               <div class="nav-bar">
-                <b>스트림</b>
+                <span>스트림</span>
                 <span>내 음악</span>
-                <span>추출기</span>
+                <span class="active">추출기</span>
               </div>
             </div>
           </div>
@@ -97,7 +179,7 @@
           <p class="eyebrow">Direct APK</p>
           <h2 id="download-title">최신 정식 APK 다운로드</h2>
           <p>
-            GitHub Releases의 최신 정식 버전을 확인해 Android APK 파일을 바로 받을 수 있습니다.
+            최신 정식 버전을 확인해 Android APK 파일을 바로 받을 수 있습니다.
           </p>
         </div>
         <div class="download-card">
@@ -110,7 +192,7 @@
             APK 다운로드
           </a>
           <p class="download-status" data-release-status>
-            GitHub Releases에서 최신 정식 APK를 확인합니다.
+            최신 정식 APK 정보를 확인합니다.
           </p>
           <dl class="release-strip">
             <div>
@@ -185,15 +267,7 @@
         </ol>
       </section>
 
-      <section class="guide" id="guide" aria-labelledby="guide-title">
-        <div class="section-copy centered">
-          <p class="eyebrow">Install and use</p>
-          <h2 id="guide-title">설치는 짧게, 사용법은 전체 스크롤로</h2>
-          <p>
-            설치 단계는 고정 안내로 정리하고, 앱 기능은 스마트폰 목업과 설명 카드가 아래로 이어지도록 구성했습니다.
-          </p>
-        </div>
-
+      <section class="guide" id="guide" aria-label="사용설명">
         <article class="guide-card install-guide">
           <div class="guide-visual install-shot" aria-label="APK 설치 안내 화면">
             <div class="browser-shot">

@@ -34,7 +34,7 @@ html {
 #guide,
 .guide-card,
 .guide-step-card {
-  scroll-margin-top: 96px;
+  scroll-margin-top: 70px;
 }
 
 body {
@@ -140,6 +140,10 @@ select {
   background:
     linear-gradient(90deg, rgba(5, 5, 6, 0.96) 0%, rgba(5, 5, 6, 0.72) 48%, rgba(5, 5, 6, 0.2) 100%),
     linear-gradient(135deg, rgba(67, 214, 139, 0.1), rgba(255, 191, 73, 0.06));
+}
+
+.hero-switcher {
+  display: none;
 }
 
 .hero-copy {
@@ -315,16 +319,26 @@ dd {
   padding: 14px;
 }
 
-.hero-phone-main {
-  top: 14vh;
+.hero-phone-extractor {
+  top: 12vh;
   transform: rotate(3deg);
+  z-index: 3;
 }
 
-.hero-phone-side {
+.hero-phone-stream {
   right: min(6vw, 70px);
-  top: 30vh;
-  opacity: 0.74;
-  transform: translateX(-250px) scale(0.82) rotate(-6deg);
+  top: 34vh;
+  opacity: 0.82;
+  transform: translateX(-260px) scale(0.78) rotate(-6deg);
+  z-index: 2;
+}
+
+.hero-phone-library {
+  right: min(7vw, 120px);
+  top: 22vh;
+  opacity: 0.7;
+  transform: translateX(-500px) scale(0.68) rotate(-1deg);
+  z-index: 1;
 }
 
 .phone-status {
@@ -346,6 +360,36 @@ dd {
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 22%),
     #0a0b0e;
   padding: 24px 18px;
+}
+
+.hero-screen,
+.stream-screen,
+.library-screen {
+  padding-bottom: 76px;
+}
+
+.hero-phone .mini-track {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 48px;
+  margin: 0;
+  padding: 9px;
+}
+
+.hero-phone .stream-section {
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.hero-phone .chip-row {
+  margin-bottom: 14px;
+}
+
+.hero-phone .library-row {
+  margin-bottom: 8px;
+  padding: 9px;
 }
 
 .screen-title {
@@ -539,6 +583,7 @@ dd {
 }
 
 .nav-bar b,
+.nav-bar span.active,
 .bottom-tabs b,
 .bottom-tabs span.active {
   color: var(--red);
@@ -693,6 +738,7 @@ dd {
 .guide {
   display: grid;
   gap: clamp(34px, 6vw, 78px);
+  padding-top: clamp(42px, 7vw, 80px);
 }
 
 .guide-card,
@@ -1598,11 +1644,12 @@ dd {
 }
 
 @media (max-width: 1120px) {
-  .hero-phone-side {
+  .hero-phone-stream,
+  .hero-phone-library {
     display: none;
   }
 
-  .hero-phone-main {
+  .hero-phone-extractor {
     right: -36px;
     opacity: 0.58;
   }
@@ -1614,7 +1661,6 @@ dd {
     grid-template-columns: 1fr;
   }
 
-  .install-guide .guide-copy,
   .guide-step-card .app-guide-copy {
     order: -1;
   }
@@ -1669,12 +1715,16 @@ dd {
     padding: 64px 20px;
   }
 
+  .guide {
+    padding-top: 40px;
+  }
+
   #download,
   #features,
   #guide,
   .guide-card,
   .guide-step-card {
-    scroll-margin-top: 112px;
+    scroll-margin-top: 55px;
   }
 
   .section-copy.centered {
@@ -1719,9 +1769,10 @@ dd {
     z-index: 0;
     order: 2;
     display: grid;
+    gap: 14px;
     place-items: center;
     overflow: visible;
-    min-height: 500px;
+    min-height: auto;
   }
 
   .hero-bg::before {
@@ -1729,16 +1780,52 @@ dd {
   }
 
   .hero-phone {
+    display: none;
     position: relative;
     right: auto;
     width: min(260px, 74vw);
     min-width: 0;
   }
 
-  .hero-phone-main {
+  .hero-phone.is-active {
+    display: block;
+  }
+
+  .hero-phone-stream,
+  .hero-phone-library,
+  .hero-phone-extractor {
     top: auto;
     transform: none;
     opacity: 1;
+  }
+
+  .hero-switcher {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    width: min(320px, 100%);
+    padding: 4px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.055);
+  }
+
+  .hero-switcher button {
+    min-width: 0;
+    min-height: 38px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 780;
+    cursor: pointer;
+  }
+
+  .hero-switcher button.active {
+    border-color: rgba(255, 45, 53, 0.62);
+    background: rgba(255, 45, 53, 0.14);
+    color: #fff;
   }
 
   .hero-copy {
