@@ -89,10 +89,30 @@
             </a>
             <a class="button ghost" href="#guide">사용법 보기</a>
           </div>
+        </div>
+      </section>
+
+      <section class="download-section" id="download" aria-labelledby="download-title">
+        <div class="section-copy">
+          <p class="eyebrow">Direct APK</p>
+          <h2 id="download-title">최신 정식 APK 다운로드</h2>
+          <p>
+            GitHub Releases의 최신 정식 버전을 확인해 Android APK 파일을 바로 받을 수 있습니다.
+          </p>
+        </div>
+        <div class="download-card">
+          <a
+            class="button primary"
+            href="/api/latest-apk"
+            data-latest-apk-link
+            data-fallback-download-url="https://github.com/hojin-v/YTET-Android/releases/download/v1.3.7/YTET-Android-v1.3.7.apk"
+          >
+            APK 다운로드
+          </a>
           <p class="download-status" data-release-status>
             GitHub Releases에서 최신 정식 APK를 확인합니다.
           </p>
-          <dl class="release-strip" id="download">
+          <dl class="release-strip">
             <div>
               <dt>버전</dt>
               <dd data-release-version>1.3.7-android</dd>
@@ -178,7 +198,8 @@
           <div class="guide-visual install-shot" aria-label="APK 설치 안내 화면">
             <div class="browser-shot">
               <div class="browser-bar">ytet.app/download</div>
-              <div class="download-item">
+              <div class="download-item install-target">
+                <span class="pin">1</span>
                 <img src="assets/ytet_launcher_icon.png" alt="" width="54" height="54">
                 <div>
                   <strong data-apk-name>YTET-Android-v1.3.7.apk</strong>
@@ -188,13 +209,12 @@
               <div class="android-dialog">
                 <strong>이 앱을 설치하시겠습니까?</strong>
                 <span>YTET</span>
-                <button>설치</button>
+                <button class="install-button">
+                  설치
+                  <span class="pin">2</span>
+                </button>
               </div>
             </div>
-            <span class="mark-box" style="--x: 5.5%; --y: 18.5%; --w: 89%; --h: 16.5%;"></span>
-            <span class="mark-circle" style="--x: 70%; --y: 70%; --s: 18%;"></span>
-            <span class="pin" style="--x: -2%; --y: 16%;">1</span>
-            <span class="pin" style="--x: 66%; --y: 67%;">2</span>
           </div>
           <div class="guide-copy">
             <p class="guide-step">설치 안내</p>

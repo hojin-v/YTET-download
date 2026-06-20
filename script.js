@@ -1,5 +1,5 @@
 const guideStack = document.querySelector("[data-guide-stack]");
-const latestApkLink = document.querySelector("[data-latest-apk-link]");
+const latestApkLinks = document.querySelectorAll("[data-latest-apk-link]");
 const releaseStatus = document.querySelector("[data-release-status]");
 const releaseVersion = document.querySelector("[data-release-version]");
 const releaseSize = document.querySelector("[data-release-size]");
@@ -492,12 +492,14 @@ function renderGuideStack() {
 }
 
 async function loadLatestApkRelease() {
-  if (!latestApkLink) {
+  if (!latestApkLinks.length) {
     return;
   }
 
-  const fallbackUrl = latestApkLink.dataset.fallbackDownloadUrl || releasesPageUrl;
-  latestApkLink.href = "/api/latest-apk";
+  const fallbackUrl = latestApkLinks[0].dataset.fallbackDownloadUrl || releasesPageUrl;
+  latestApkLinks.forEach((link) => {
+    link.href = "/api/latest-apk";
+  });
 
   try {
     const response = await fetch(releasesApiUrl, {
@@ -515,8 +517,10 @@ async function loadLatestApkRelease() {
     }
 
     const versionName = `${latest.tag_name.replace(/^v/, "")}-android`;
-    latestApkLink.href = asset.browser_download_url;
-    latestApkLink.textContent = "최신 APK 다운로드";
+    latestApkLinks.forEach((link) => {
+      link.href = asset.browser_download_url;
+      link.textContent = "최신 APK 다운로드";
+    });
     if (releaseVersion) {
       releaseVersion.textContent = versionName;
     }
@@ -530,7 +534,9 @@ async function loadLatestApkRelease() {
       releaseStatus.textContent = `최신 정식 릴리즈 ${latest.tag_name} · GitHub Releases에서 직접 다운로드`;
     }
   } catch (error) {
-    latestApkLink.href = fallbackUrl;
+    latestApkLinks.forEach((link) => {
+      link.href = fallbackUrl;
+    });
     if (releaseStatus) {
       releaseStatus.textContent = "릴리즈 정보를 불러오지 못하면 현재 확인된 최신 APK 또는 GitHub Releases로 이동합니다.";
     }
