@@ -1,19 +1,20 @@
 :root {
   color-scheme: dark;
-  --bg: #08080a;
-  --panel: #15161a;
-  --panel-2: #202229;
-  --panel-3: #2a2d35;
-  --text: #f7f4ef;
-  --muted: #aeb5c2;
-  --soft: #d7dce5;
-  --red: #e50914;
-  --red-dark: #a00612;
-  --green: #28c76f;
-  --amber: #ffb020;
-  --blue: #4aa3ff;
-  --line: rgba(255, 255, 255, 0.12);
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --bg: #050506;
+  --panel: #0f1014;
+  --panel-2: #17191f;
+  --panel-3: #22252d;
+  --text: #fffaf3;
+  --muted: #9fa7b5;
+  --soft: #e7eaf0;
+  --red: #ff2d35;
+  --red-dark: #b80b17;
+  --green: #43d68b;
+  --amber: #ffbf49;
+  --blue: #58a6ff;
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.52);
   --radius: 8px;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -32,7 +33,7 @@ html {
 #features,
 #guide,
 .guide-card,
-.interactive-guide {
+.guide-step-card {
   scroll-margin-top: 96px;
 }
 
@@ -40,11 +41,12 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    linear-gradient(180deg, rgba(229, 9, 20, 0.13), rgba(8, 8, 10, 0) 340px),
+    linear-gradient(180deg, rgba(255, 45, 53, 0.16), rgba(5, 5, 6, 0) 360px),
+    linear-gradient(115deg, rgba(67, 214, 139, 0.075), transparent 42%),
     repeating-linear-gradient(
       90deg,
-      rgba(255, 255, 255, 0.035) 0,
-      rgba(255, 255, 255, 0.035) 1px,
+      rgba(255, 255, 255, 0.04) 0,
+      rgba(255, 255, 255, 0.04) 1px,
       transparent 1px,
       transparent 72px
     ),
@@ -73,9 +75,10 @@ select {
   gap: 24px;
   min-height: 70px;
   padding: 14px clamp(18px, 5vw, 68px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(8, 8, 10, 0.82);
-  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(5, 5, 6, 0.78);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(20px);
 }
 
 .brand {
@@ -107,7 +110,7 @@ select {
 .hero {
   position: relative;
   display: grid;
-  min-height: max(620px, calc(100vh - 150px));
+  min-height: max(690px, calc(100vh - 110px));
   padding: clamp(70px, 11vh, 128px) clamp(18px, 5vw, 68px) 54px;
   overflow: hidden;
   isolation: isolate;
@@ -135,8 +138,8 @@ select {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(8, 8, 10, 0.94) 0%, rgba(8, 8, 10, 0.72) 45%, rgba(8, 8, 10, 0.28) 100%),
-    linear-gradient(135deg, rgba(40, 199, 111, 0.08), rgba(255, 176, 32, 0.06));
+    linear-gradient(90deg, rgba(5, 5, 6, 0.96) 0%, rgba(5, 5, 6, 0.72) 48%, rgba(5, 5, 6, 0.2) 100%),
+    linear-gradient(135deg, rgba(67, 214, 139, 0.1), rgba(255, 191, 73, 0.06));
 }
 
 .hero-copy {
@@ -149,7 +152,7 @@ select {
   color: var(--red);
   font-size: 12px;
   font-weight: 850;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -178,6 +181,7 @@ h1 {
   font-size: clamp(58px, 13vw, 152px);
   line-height: 0.86;
   letter-spacing: 0;
+  text-shadow: 0 24px 80px rgba(255, 45, 53, 0.18);
 }
 
 h2 {
@@ -234,7 +238,8 @@ h3 {
   color: var(--text);
   font-weight: 780;
   cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
 .button:hover,
@@ -244,13 +249,13 @@ h3 {
 
 .button.primary {
   background: linear-gradient(180deg, var(--red), var(--red-dark));
-  box-shadow: 0 16px 34px rgba(229, 9, 20, 0.26);
+  box-shadow: 0 18px 42px rgba(255, 45, 53, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 .button.ghost,
 .button.secondary {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.055);
 }
 
 .button.compact {
@@ -265,7 +270,9 @@ h3 {
   margin: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(12, 12, 15, 0.72);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(12, 13, 17, 0.78);
   backdrop-filter: blur(16px);
   overflow: hidden;
 }
@@ -283,6 +290,7 @@ h3 {
 dt {
   margin-bottom: 5px;
   color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
 }
 
@@ -298,9 +306,11 @@ dd {
   width: min(330px, 34vw);
   min-width: 250px;
   aspect-ratio: 0.52;
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 34px;
-  background: #101115;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02)),
+    #101115;
   box-shadow: var(--shadow);
   padding: 14px;
 }
@@ -331,7 +341,10 @@ dd {
   height: calc(100% - 30px);
   overflow: hidden;
   border-radius: 24px;
-  background: #0b0b0d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 22%),
+    #0a0b0e;
   padding: 24px 18px;
 }
 
@@ -357,6 +370,7 @@ dd {
   min-width: 0;
   min-height: 46px;
   padding: 0 13px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: var(--panel-2);
   color: var(--muted);
@@ -371,6 +385,12 @@ dd {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+}
+
+.radio-row {
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 8px;
 }
 
 .segmented span,
@@ -395,7 +415,10 @@ dd {
 .check-row {
   position: relative;
   margin-top: 10px;
-  padding-left: 28px;
+  min-height: 38px;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   color: var(--muted);
   font-size: 13px;
 }
@@ -403,8 +426,8 @@ dd {
 .check-row::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 1px;
+  left: 12px;
+  top: 11px;
   width: 16px;
   height: 16px;
   border: 1px solid var(--line);
@@ -419,8 +442,8 @@ dd {
 .check-row.on::after {
   content: "";
   position: absolute;
-  left: 5px;
-  top: 3px;
+  left: 17px;
+  top: 13px;
   width: 5px;
   height: 9px;
   border-right: 2px solid var(--text);
@@ -471,6 +494,7 @@ dd {
   align-items: center;
   margin-top: 26px;
   padding: 12px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: var(--panel-2);
 }
@@ -516,7 +540,7 @@ dd {
 
 .nav-bar b,
 .bottom-tabs b,
-.bottom-tabs button.active {
+.bottom-tabs span.active {
   color: var(--red);
 }
 
@@ -546,12 +570,25 @@ dd {
 .workflow-list li {
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.045);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(14, 15, 19, 0.84);
 }
 
 .feature-grid article {
+  position: relative;
   min-height: 210px;
   padding: 22px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.feature-grid article::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red), transparent);
 }
 
 .feature-kicker {
@@ -582,7 +619,10 @@ dd {
   grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
   gap: clamp(26px, 5vw, 64px);
   align-items: start;
-  background: #0d0d10;
+  border-block: 1px solid rgba(255, 255, 255, 0.07);
+  background:
+    linear-gradient(90deg, rgba(255, 45, 53, 0.07), transparent 44%),
+    #0b0c10;
 }
 
 .workflow-list {
@@ -597,6 +637,7 @@ dd {
 .workflow-list li {
   min-height: 190px;
   padding: 18px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .workflow-list span {
@@ -619,25 +660,69 @@ dd {
 }
 
 .guide-card,
-.interactive-guide {
+.guide-step-card {
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(280px, 1fr);
   gap: clamp(28px, 6vw, 80px);
   align-items: center;
 }
 
-.interactive-guide [data-phone-screen],
-.interactive-guide .app-guide-copy {
-  transition: opacity 180ms ease, transform 180ms ease;
-}
-
-.interactive-guide.is-changing [data-phone-screen],
-.interactive-guide.is-changing .app-guide-copy {
-  opacity: 0.18;
-  transform: translateY(8px);
-}
-
 .guide-card.flipped .guide-visual {
+  order: 2;
+}
+
+.guide-stack {
+  display: grid;
+  gap: clamp(28px, 5vw, 54px);
+}
+
+.guide-jumps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: -32px;
+}
+
+.guide-jumps a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--soft);
+  font-weight: 760;
+}
+
+.guide-jumps a:hover,
+.guide-jumps a:focus-visible {
+  border-color: rgba(255, 45, 53, 0.64);
+  color: #fff;
+}
+
+.guide-step-card {
+  position: relative;
+  padding: clamp(18px, 3.2vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+    rgba(13, 14, 18, 0.88);
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.guide-step-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.36), transparent);
+}
+
+.guide-step-card.flipped .guide-visual {
   order: 2;
 }
 
@@ -663,9 +748,11 @@ dd {
   height: 690px;
   margin-inline: auto;
   padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 34px;
-  background: #101115;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02)),
+    #101115;
   box-shadow: var(--shadow);
 }
 
@@ -674,42 +761,42 @@ dd {
   padding: 24px 18px 70px;
 }
 
-.interactive-phone .app-screen {
+.phone-guide .app-screen {
   padding: 20px 16px 68px;
 }
 
-.interactive-phone .field-label {
+.phone-guide .field-label {
   margin: 8px 0 5px;
   font-size: 12px;
 }
 
-.interactive-phone .input-preview,
-.interactive-phone .select-preview {
+.phone-guide .input-preview,
+.phone-guide .select-preview {
   min-height: 40px;
   font-size: 12px;
 }
 
-.interactive-phone .radio-row span {
+.phone-guide .radio-row span {
   min-height: 34px;
   font-size: 12px;
 }
 
-.interactive-phone .check-row {
+.phone-guide .check-row {
   margin-top: 7px;
   font-size: 12px;
 }
 
-.interactive-phone .folder-note {
+.phone-guide .folder-note {
   margin-top: 5px;
   font-size: 11px;
 }
 
-.interactive-phone .mock-primary {
+.phone-guide .mock-primary {
   min-height: 40px;
   margin-top: 12px;
 }
 
-.interactive-phone .mini-track {
+.phone-guide .mini-track {
   position: absolute;
   left: 12px;
   right: 12px;
@@ -735,6 +822,7 @@ dd {
   flex: 1 1 auto;
   min-height: 38px;
   padding: 0 12px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;
   color: var(--text);
@@ -744,16 +832,50 @@ dd {
 
 .icon-dot,
 .icon-grid {
+  position: relative;
   width: 34px;
   height: 34px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: var(--panel-2);
+}
+
+.icon-dot::before,
+.icon-grid::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.58);
+}
+
+.icon-dot::before {
+  border-radius: 999px;
+}
+
+.icon-dot::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 7px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  transform: rotate(45deg);
+}
+
+.icon-grid::before {
+  box-shadow: 8px 0 0 -2px rgba(255, 255, 255, 0.58), 0 8px 0 -2px rgba(255, 255, 255, 0.58), 8px 8px 0 -2px rgba(255, 255, 255, 0.58);
 }
 
 .chip-row {
   display: flex;
   gap: 6px;
   margin-bottom: 24px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
   overflow: hidden;
 }
 
@@ -804,11 +926,25 @@ dd {
   display: grid;
   grid-template-columns: 2fr 0.9fr;
   gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
 }
 
 .folder-row button,
 .action-row .cancel {
   background: var(--panel-3);
+}
+
+.folder-row span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border-radius: 8px;
+  background: var(--panel-3);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 760;
 }
 
 .folder-note {
@@ -1061,43 +1197,8 @@ dd {
   color: #fff;
 }
 
-.interactive-guide {
-  border-radius: var(--radius);
-  outline: 0;
-}
-
-.interactive-guide:focus-visible {
-  box-shadow: 0 0 0 2px rgba(229, 9, 20, 0.42);
-}
-
-.guide-scroll-progress {
-  display: grid;
-  gap: 8px;
-  width: min(360px, 100%);
-  margin-top: 14px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.guide-progress-track {
-  height: 4px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.09);
-}
-
-.guide-progress-track i {
-  display: block;
-  width: var(--progress, 0%);
-  height: 100%;
-  border-radius: inherit;
-  background: var(--red);
-  transition: width 180ms ease;
-}
-
 .mock-clickable,
-.mock-primary,
-.mock-tabs button {
+.mock-primary {
   width: 100%;
   border: 1px solid transparent;
   color: inherit;
@@ -1113,20 +1214,8 @@ dd {
 .mock-clickable:hover,
 .mock-clickable:focus-visible,
 .mock-primary:hover,
-.mock-primary:focus-visible,
-.mock-tabs button:hover,
-.mock-tabs button:focus-visible {
+.mock-primary:focus-visible {
   border-color: rgba(229, 9, 20, 0.56);
-}
-
-.mock-clickable.active,
-.mock-primary.active {
-  border-color: rgba(229, 9, 20, 0.86);
-  box-shadow: inset 0 0 0 1px rgba(229, 9, 20, 0.34), 0 10px 24px rgba(229, 9, 20, 0.14);
-}
-
-.mock-clickable.active-soft {
-  border-color: rgba(229, 9, 20, 0.5);
 }
 
 .stream-row,
@@ -1361,6 +1450,32 @@ dd {
   text-align: center;
 }
 
+.input-preview.active,
+.radio-row.active,
+.check-row.active,
+.folder-row.active,
+.library-row.active,
+.mini-track.active,
+.source-chip.active,
+.icon-dot.active,
+.icon-grid.active,
+.chip-row.active,
+.mock-primary.active {
+  border-color: rgba(255, 45, 53, 0.86);
+  box-shadow: inset 0 0 0 1px rgba(255, 45, 53, 0.3), 0 10px 24px rgba(255, 45, 53, 0.14);
+}
+
+.select-preview.active-soft,
+.library-row.active-soft {
+  border-color: rgba(255, 45, 53, 0.48);
+  background: rgba(255, 45, 53, 0.08);
+}
+
+.check-row.active,
+.chip-row.active {
+  background: rgba(255, 45, 53, 0.08);
+}
+
 .browser-mini {
   display: block;
   overflow: hidden;
@@ -1385,20 +1500,19 @@ dd {
   gap: 0;
 }
 
-.mock-tabs button {
-  border: 0;
-  background: transparent;
+.mock-tabs span {
+  display: block;
   color: var(--muted);
   text-align: center;
   font-size: 11px;
 }
 
-.mock-tabs button.active {
+.mock-tabs span.active {
   color: var(--red);
   font-weight: 850;
 }
 
-.screen-toolbar button {
+.screen-toolbar span {
   flex: 0 0 auto;
   border: 1px solid transparent;
 }
@@ -1419,24 +1533,6 @@ dd {
   display: block;
   border-radius: 8px;
   background: transparent;
-}
-
-.folder-row.mock-clickable {
-  padding: 0;
-  border-radius: 8px;
-  background: transparent;
-}
-
-.folder-row.mock-clickable span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  border-radius: 8px;
-  background: var(--panel-3);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 760;
 }
 
 .site-footer {
@@ -1462,16 +1558,17 @@ dd {
 
   .workflow,
   .guide-card,
-  .interactive-guide {
+  .guide-step-card {
     grid-template-columns: 1fr;
   }
 
   .install-guide .guide-copy,
-  .interactive-guide .app-guide-copy {
+  .guide-step-card .app-guide-copy {
     order: -1;
   }
 
-  .guide-card.flipped .guide-visual {
+  .guide-card.flipped .guide-visual,
+  .guide-step-card.flipped .guide-visual {
     order: 0;
   }
 
@@ -1504,7 +1601,7 @@ dd {
   #features,
   #guide,
   .guide-card,
-  .interactive-guide {
+  .guide-step-card {
     scroll-margin-top: 112px;
   }
 
@@ -1595,7 +1692,7 @@ dd {
   }
 
   .guide-card,
-  .interactive-guide {
+  .guide-step-card {
     gap: 22px;
   }
 
@@ -1618,8 +1715,7 @@ dd {
     padding-inline: 15px;
   }
 
-  .phone-guide .app-screen,
-  .interactive-phone .app-screen {
+  .phone-guide .app-screen {
     padding: 18px 14px 64px;
   }
 
@@ -1683,10 +1779,6 @@ dd {
     padding: 0 8px;
     font-size: 13px;
     text-align: center;
-  }
-
-  .guide-scroll-progress {
-    width: 100%;
   }
 
   .guide-example {
@@ -1779,7 +1871,7 @@ dd {
     grid-template-columns: 1fr;
   }
 
-  .folder-row.mock-clickable span {
+  .folder-row span {
     min-height: 34px;
   }
 }

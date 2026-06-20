@@ -1,11 +1,4 @@
-const phoneScreen = document.querySelector("[data-phone-screen]");
-const guideTitle = document.querySelector("[data-guide-title]");
-const guideText = document.querySelector("[data-guide-text]");
-const guidePoints = document.querySelector("[data-guide-points]");
-const guideExample = document.querySelector("[data-guide-example]");
-const interactiveGuide = document.querySelector(".interactive-guide");
-const guideProgressLabel = document.querySelector("[data-guide-progress-label]");
-const guideProgressBar = document.querySelector("[data-guide-progress-bar]");
+const guideStack = document.querySelector("[data-guide-stack]");
 const latestApkLink = document.querySelector("[data-latest-apk-link]");
 const releaseStatus = document.querySelector("[data-release-status]");
 const releaseVersion = document.querySelector("[data-release-version]");
@@ -23,108 +16,6 @@ const tabLabels = {
   library: "내 음악",
   extractor: "추출기",
 };
-
-function stableParts(tagName) {
-  const match = stableTagPattern.exec(String(tagName || "").trim());
-  return match ? match.slice(1).map((value) => Number.parseInt(value, 10)) : null;
-}
-
-function compareStableTags(left, right) {
-  const leftParts = stableParts(left);
-  const rightParts = stableParts(right);
-  if (!leftParts || !rightParts) {
-    return 0;
-  }
-  for (let index = 0; index < leftParts.length; index += 1) {
-    if (leftParts[index] !== rightParts[index]) {
-      return leftParts[index] - rightParts[index];
-    }
-  }
-  return 0;
-}
-
-function stableApkAsset(release) {
-  return (release.assets || []).find((asset) => {
-    const name = String(asset.name || "");
-    const url = String(asset.browser_download_url || "");
-    return stableApkPattern.test(name) && !unstableMarkerPattern.test(name) && url.startsWith("https://");
-  });
-}
-
-function latestStableRelease(releases) {
-  return (Array.isArray(releases) ? releases : [])
-    .filter((release) => {
-      const tagName = String(release.tag_name || "");
-      const releaseName = String(release.name || "");
-      return !release.draft
-        && !release.prerelease
-        && stableTagPattern.test(tagName)
-        && !unstableMarkerPattern.test(`${tagName} ${releaseName}`)
-        && stableApkAsset(release);
-    })
-    .sort((left, right) => compareStableTags(right.tag_name, left.tag_name))[0];
-}
-
-function formatBytes(bytes) {
-  const value = Number(bytes);
-  if (!Number.isFinite(value) || value <= 0) {
-    return "확인 중";
-  }
-  const units = ["B", "KB", "MB", "GB"];
-  let size = value;
-  let unitIndex = 0;
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex += 1;
-  }
-  return `${size.toFixed(unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
-}
-
-async function loadLatestApkRelease() {
-  if (!latestApkLink) {
-    return;
-  }
-
-  const fallbackUrl = latestApkLink.dataset.fallbackDownloadUrl || releasesPageUrl;
-  latestApkLink.href = "/api/latest-apk";
-
-  try {
-    const response = await fetch(releasesApiUrl, {
-      headers: {
-        Accept: "application/vnd.github+json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`GitHub Releases API ${response.status}`);
-    }
-    const latest = latestStableRelease(await response.json());
-    const asset = latest ? stableApkAsset(latest) : null;
-    if (!latest || !asset) {
-      throw new Error("Stable APK asset not found");
-    }
-
-    const versionName = `${latest.tag_name.replace(/^v/, "")}-android`;
-    latestApkLink.href = asset.browser_download_url;
-    latestApkLink.textContent = "최신 APK 다운로드";
-    if (releaseVersion) {
-      releaseVersion.textContent = versionName;
-    }
-    if (releaseSize) {
-      releaseSize.textContent = formatBytes(asset.size);
-    }
-    if (apkName) {
-      apkName.textContent = asset.name;
-    }
-    if (releaseStatus) {
-      releaseStatus.textContent = `최신 정식 릴리즈 ${latest.tag_name} · GitHub Releases에서 직접 다운로드`;
-    }
-  } catch (error) {
-    latestApkLink.href = fallbackUrl;
-    if (releaseStatus) {
-      releaseStatus.textContent = "릴리즈 정보를 불러오지 못하면 현재 확인된 최신 APK 또는 GitHub Releases로 이동합니다.";
-    }
-  }
-}
 
 const guideData = {
   stream: {
@@ -158,15 +49,6 @@ const guideData = {
       ["앱 내 재생", "선택한 음악은 하단 플레이어와 확장 플레이어에서 재생합니다."],
     ],
     details: {
-      "library-permission": {
-        title: "오디오 권한",
-        text: "처음 사용할 때는 기기 음악 파일을 읽기 위한 Android 권한이 필요합니다.",
-        points: [
-          ["권한 허용", "권한 허용 버튼을 누르면 기기 음악 스캔을 시작할 수 있습니다."],
-          ["읽기 중심", "음악을 정리하고 재생하기 위한 읽기 권한입니다."],
-          ["권한 후 자동 정리", "허용 뒤에는 앨범, 아티스트, 재생목록 기준으로 화면이 구성됩니다."],
-        ],
-      },
       "library-filters": {
         title: "보관함 필터",
         text: "필터 칩을 눌러 같은 음악 목록을 다른 기준으로 볼 수 있습니다.",
@@ -302,18 +184,60 @@ const guideSteps = [
   { screen: "extractor", target: "extract-start" },
 ];
 
-let currentScreen = "stream";
-let guideRenderTimer = 0;
-let guideInitialized = false;
-let extractorMode = "audio";
-let currentGuideStepIndex = 0;
-let guideWheelDelta = 0;
-let guideWheelLocked = false;
-let guideTouchStartY = 0;
-let guideTouchStartX = 0;
+function stableParts(tagName) {
+  const match = stableTagPattern.exec(String(tagName || "").trim());
+  return match ? match.slice(1).map((value) => Number.parseInt(value, 10)) : null;
+}
 
-function isMobileGuideLayout() {
-  return window.matchMedia("(max-width: 760px)").matches;
+function compareStableTags(left, right) {
+  const leftParts = stableParts(left);
+  const rightParts = stableParts(right);
+  if (!leftParts || !rightParts) {
+    return 0;
+  }
+  for (let index = 0; index < leftParts.length; index += 1) {
+    if (leftParts[index] !== rightParts[index]) {
+      return leftParts[index] - rightParts[index];
+    }
+  }
+  return 0;
+}
+
+function stableApkAsset(release) {
+  return (release.assets || []).find((asset) => {
+    const name = String(asset.name || "");
+    const url = String(asset.browser_download_url || "");
+    return stableApkPattern.test(name) && !unstableMarkerPattern.test(name) && url.startsWith("https://");
+  });
+}
+
+function latestStableRelease(releases) {
+  return (Array.isArray(releases) ? releases : [])
+    .filter((release) => {
+      const tagName = String(release.tag_name || "");
+      const releaseName = String(release.name || "");
+      return !release.draft
+        && !release.prerelease
+        && stableTagPattern.test(tagName)
+        && !unstableMarkerPattern.test(`${tagName} ${releaseName}`)
+        && stableApkAsset(release);
+    })
+    .sort((left, right) => compareStableTags(right.tag_name, left.tag_name))[0];
+}
+
+function formatBytes(bytes) {
+  const value = Number(bytes);
+  if (!Number.isFinite(value) || value <= 0) {
+    return "확인 중";
+  }
+  const units = ["B", "KB", "MB", "GB"];
+  let size = value;
+  let unitIndex = 0;
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex += 1;
+  }
+  return `${size.toFixed(unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
 }
 
 function escapeHtml(value) {
@@ -331,7 +255,7 @@ function tabsHtml(activeScreen) {
         .map((key) => {
           const label = tabLabels[key];
           const activeClass = key === activeScreen ? "active" : "";
-          return `<button class="${activeClass}" type="button" data-guide-screen="${key}">${label}</button>`;
+          return `<span class="${activeClass}">${label}</span>`;
         })
         .join("")}
     </div>
@@ -393,354 +317,225 @@ function screenHtml(screenKey, activeTarget) {
   if (screenKey === "library") {
     return `
       <div class="screen-toolbar compact-toolbar">
-        <button class="source-chip mock-clickable" type="button" data-guide-hotspot="library-filters">보관함 ▾</button>
-        <button class="icon-dot mock-clickable ${activeTarget === "library-actions" ? "active" : ""}" type="button" aria-label="검색" data-guide-hotspot="library-actions"></button>
-        <button class="icon-grid mock-clickable ${activeTarget === "library-actions" ? "active" : ""}" type="button" aria-label="보기 전환" data-guide-hotspot="library-actions"></button>
+        <span class="source-chip ${activeTarget === "library-filters" ? "active" : ""}">보관함</span>
+        <span class="icon-dot ${activeTarget === "library-actions" ? "active" : ""}" aria-label="검색"></span>
+        <span class="icon-grid ${activeTarget === "library-actions" ? "active" : ""}" aria-label="보기 전환"></span>
       </div>
-      <button class="chip-row mock-clickable ${activeTarget === "library-filters" ? "active" : ""}" type="button" data-guide-hotspot="library-filters">
+      <div class="chip-row ${activeTarget === "library-filters" ? "active" : ""}">
         <span class="active">전체</span>
         <span>앨범</span>
         <span>아티스트</span>
         <span>재생목록</span>
-      </button>
-      <button class="library-row mock-clickable ${activeTarget === "library-player" ? "active" : ""}" type="button" data-guide-hotspot="library-player">
+      </div>
+      <div class="library-row ${activeTarget === "library-player" ? "active" : ""}">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>26</strong>
           <small>Lauv · All 4 Nothing</small>
         </span>
-      </button>
-      <button class="library-row mock-clickable ${activeTarget === "library-player" ? "active-soft" : ""}" type="button" data-guide-hotspot="library-player">
+      </div>
+      <div class="library-row ${activeTarget === "library-player" ? "active-soft" : ""}">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>Stranger</strong>
           <small>Lauv · All 4 Nothing</small>
         </span>
-      </button>
-      <button class="library-row mock-clickable ${activeTarget === "library-player" ? "active-soft" : ""}" type="button" data-guide-hotspot="library-player">
+      </div>
+      <div class="library-row ${activeTarget === "library-player" ? "active-soft" : ""}">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>Kids Are Born Stars</strong>
           <small>Lauv · All 4 Nothing</small>
         </span>
-      </button>
-      <button class="mini-track mock-clickable ${activeTarget === "library-player" ? "active" : ""}" type="button" data-guide-hotspot="library-player">
+      </div>
+      <div class="mini-track ${activeTarget === "library-player" ? "active" : ""}">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>26</strong>
           <small>재생 중 · Lauv</small>
         </span>
         <span class="playing-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-      </button>
+      </div>
       ${tabsHtml(screenKey)}
     `;
   }
 
-  const isVideoMode = extractorMode === "video";
-  const modeTarget = isVideoMode ? "extract-mode-video" : "extract-mode-audio";
+  const isVideoMode = activeTarget === "extract-mode-video" || activeTarget === "extract-subtitles";
   const modeActive = activeTarget === "extract-mode-audio" || activeTarget === "extract-mode-video";
   const folderPath = isVideoMode ? "Download/YTET/Video" : "Download/YTET/Music";
 
   return `
     <div class="field-label">YouTube URL</div>
-    <button class="input-preview mock-clickable ${activeTarget === "extract-url" ? "active" : ""}" type="button" data-guide-hotspot="extract-url">
+    <div class="input-preview ${activeTarget === "extract-url" ? "active" : ""}">
       https://youtu.be/6Yf4tPL6_Xw
-    </button>
+    </div>
     <div class="field-label">모드</div>
-    <button class="radio-row mock-clickable ${modeActive ? "active" : ""}" type="button" data-guide-hotspot="${modeTarget}">
-      <span class="${!isVideoMode ? "selected" : ""}" data-extractor-mode="audio">음원</span>
-      <span class="${isVideoMode ? "selected" : ""}" data-extractor-mode="video">영상</span>
-    </button>
+    <div class="radio-row ${modeActive ? "active" : ""}">
+      <span class="${!isVideoMode ? "selected" : ""}">음원</span>
+      <span class="${isVideoMode ? "selected" : ""}">영상</span>
+    </div>
     <div class="field-label">포맷 / 품질</div>
-    <button class="select-preview mock-clickable ${modeActive ? "active-soft" : ""}" type="button" data-guide-hotspot="${modeTarget}">
+    <div class="select-preview ${modeActive ? "active-soft" : ""}">
       ${isVideoMode ? "원본 최고품질 (MKV)" : "M4A (AAC)"}
-    </button>
+    </div>
     ${
       isVideoMode
         ? `
-          <button class="check-row mock-clickable ${activeTarget === "extract-subtitles" ? "active" : ""}" type="button" data-guide-hotspot="extract-subtitles">
+          <div class="check-row ${activeTarget === "extract-subtitles" ? "active" : ""}">
             한국어/영어 등록 자막 포함
-          </button>
+          </div>
         `
         : `
-          <button class="check-row mock-clickable ${activeTarget === "extract-playlist" ? "active" : ""}" type="button" data-guide-hotspot="extract-playlist">
+          <div class="check-row ${activeTarget === "extract-playlist" ? "active" : ""}">
             전체 플레이리스트 추출
-          </button>
-          <button class="check-row on mock-clickable ${activeTarget === "extract-metadata" ? "active" : ""}" type="button" data-guide-hotspot="extract-metadata">
+          </div>
+          <div class="check-row on ${activeTarget === "extract-metadata" ? "active" : ""}">
             실제 제목/아티스트 보정
-          </button>
+          </div>
         `
     }
     <div class="field-label">저장 폴더</div>
-    <button class="folder-row mock-clickable ${activeTarget === "extract-folder" ? "active" : ""}" type="button" data-guide-hotspot="extract-folder">
+    <div class="folder-row ${activeTarget === "extract-folder" ? "active" : ""}">
       <span>사용자 지정 폴더 선택</span>
       <span>기본값</span>
-    </button>
+    </div>
     <small class="folder-note">기본 저장: ${folderPath}</small>
-    <button class="mock-primary ${activeTarget === "extract-start" ? "active" : ""}" type="button" data-guide-hotspot="extract-start">
+    <div class="mock-primary ${activeTarget === "extract-start" ? "active" : ""}">
       추출
-    </button>
+    </div>
     ${tabsHtml(screenKey)}
   `;
 }
 
-function renderExample(detail) {
-  if (!guideExample) {
-    return;
-  }
+function exampleHtml(detail) {
   if (!detail.example) {
-    guideExample.hidden = true;
-    guideExample.innerHTML = "";
-    return;
+    return "";
   }
-  const example = typeof detail.example === "string" ? { url: detail.example } : detail.example;
+
+  const example = detail.example;
   const escaped = escapeHtml(example.url).replace(
     "list=PLxA687tYuMWg_uIXlHU5lAOH11-QDw0OP",
     "<b>list=PLxA687tYuMWg_uIXlHU5lAOH11-QDw0OP</b>",
   );
-  guideExample.hidden = false;
-  guideExample.innerHTML = `
-    ${example.image ? `<img src="${escapeHtml(example.image)}" alt="${escapeHtml(example.caption || "YouTube 플레이리스트 화면")}">` : ""}
-    <span class="browser-mini">${escaped}</span>
-    <span class="url-note">${escapeHtml(example.caption || "참고: list= 값이 붙은 YouTube 재생목록 URL")}</span>
+
+  return `
+    <div class="guide-example">
+      ${example.image ? `<img src="${escapeHtml(example.image)}" alt="${escapeHtml(example.caption || "YouTube 플레이리스트 화면")}">` : ""}
+      <span class="browser-mini">${escaped}</span>
+      <span class="url-note">${escapeHtml(example.caption || "참고: list= 값이 붙은 YouTube 재생목록 URL")}</span>
+    </div>
   `;
 }
 
-function renderPoints(points) {
-  guidePoints.innerHTML = points
-    .map(
-      ([title, body], index) => `
-        <li>
-          <span>${index + 1}</span>
-          <div>
-            <strong>${escapeHtml(title)}</strong>
-            <p>${escapeHtml(body)}</p>
+function pointsHtml(points) {
+  return `
+    <ol class="guide-points compact">
+      ${points
+        .map(
+          ([title, body], index) => `
+            <li>
+              <span>${index + 1}</span>
+              <div>
+                <strong>${escapeHtml(title)}</strong>
+                <p>${escapeHtml(body)}</p>
+              </div>
+            </li>
+          `,
+        )
+        .join("")}
+    </ol>
+  `;
+}
+
+function anchorIdForStep(step, index, seenScreens) {
+  if (!seenScreens.has(step.screen)) {
+    seenScreens.add(step.screen);
+    return `guide-${step.screen}`;
+  }
+  return `guide-step-${index + 1}`;
+}
+
+function renderGuideStack() {
+  if (!guideStack) {
+    return;
+  }
+
+  const seenScreens = new Set();
+  guideStack.innerHTML = guideSteps
+    .map((step, index) => {
+      const screen = guideData[step.screen];
+      const detail = screen.details[step.target] || screen;
+      const anchorId = anchorIdForStep(step, index, seenScreens);
+      const flippedClass = index % 2 === 1 ? " flipped" : "";
+
+      return `
+        <article class="guide-step-card${flippedClass}" id="${anchorId}">
+          <div class="guide-visual phone-guide">
+            <div class="phone-shell">
+              <div class="phone-status"></div>
+              <div class="app-screen">
+                ${screenHtml(step.screen, step.target)}
+              </div>
+            </div>
           </div>
-        </li>
-      `,
-    )
+          <div class="guide-copy app-guide-copy">
+            <p class="guide-step">Step ${String(index + 1).padStart(2, "0")} / ${escapeHtml(tabLabels[step.screen])}</p>
+            <h3>${escapeHtml(detail.title)}</h3>
+            <p>${escapeHtml(detail.text)}</p>
+            ${exampleHtml(detail)}
+            ${pointsHtml(detail.points || screen.points)}
+          </div>
+        </article>
+      `;
+    })
     .join("");
 }
 
-function guideStepIndex(screenKey, targetKey) {
-  return guideSteps.findIndex((step) => step.screen === screenKey && step.target === targetKey);
-}
-
-function firstGuideStepIndex(screenKey) {
-  const index = guideSteps.findIndex((step) => step.screen === screenKey);
-  return index < 0 ? 0 : index;
-}
-
-function updateGuideProgress(screenKey, targetKey) {
-  const index = guideStepIndex(screenKey, targetKey);
-  if (index >= 0) {
-    currentGuideStepIndex = index;
-  }
-
-  if (!guideProgressLabel || !guideProgressBar) {
+async function loadLatestApkRelease() {
+  if (!latestApkLink) {
     return;
   }
 
-  const current = currentGuideStepIndex + 1;
-  const total = guideSteps.length;
-  guideProgressLabel.textContent = `단계 ${current} / ${total}`;
-  guideProgressBar.style.setProperty("--progress", `${(current / total) * 100}%`);
-}
+  const fallbackUrl = latestApkLink.dataset.fallbackDownloadUrl || releasesPageUrl;
+  latestApkLink.href = "/api/latest-apk";
 
-function syncExtractorMode(targetKey) {
-  if (targetKey === "extract-mode-video" || targetKey === "extract-subtitles") {
-    extractorMode = "video";
-    return;
-  }
-
-  if (
-    targetKey === "extract-mode-audio" ||
-    targetKey === "extract-playlist" ||
-    targetKey === "extract-metadata"
-  ) {
-    extractorMode = "audio";
-  }
-}
-
-function applyGuide(screenKey, targetKey) {
-  const screen = guideData[screenKey];
-  if (!screen || !phoneScreen || !guideTitle || !guideText || !guidePoints) {
-    return;
-  }
-
-  currentScreen = screenKey;
-  const activeTarget = targetKey || screen.active;
-  if (screenKey === "extractor") {
-    syncExtractorMode(activeTarget);
-  }
-  const detail = screen.details[activeTarget] || screen;
-
-  phoneScreen.innerHTML = screenHtml(screenKey, activeTarget);
-  guideTitle.textContent = detail.title;
-  guideText.textContent = detail.text;
-  renderExample(detail);
-  renderPoints(detail.points || screen.points);
-  updateGuideProgress(screenKey, activeTarget);
-
-  document.querySelectorAll("[data-guide-screen]").forEach((button) => {
-    const selected = button.dataset.guideScreen === screenKey;
-    button.classList.toggle("active", selected);
-    button.setAttribute("aria-selected", selected ? "true" : "false");
-  });
-}
-
-function renderGuide(screenKey, targetKey, options = {}) {
-  if (!guideInitialized || options.instant || !interactiveGuide) {
-    applyGuide(screenKey, targetKey);
-    guideInitialized = true;
-    return;
-  }
-
-  window.clearTimeout(guideRenderTimer);
-  interactiveGuide.classList.add("is-changing");
-  guideRenderTimer = window.setTimeout(() => {
-    applyGuide(screenKey, targetKey);
-    window.requestAnimationFrame(() => {
-      interactiveGuide.classList.remove("is-changing");
+  try {
+    const response = await fetch(releasesApiUrl, {
+      headers: {
+        Accept: "application/vnd.github+json",
+      },
     });
-  }, 120);
-}
-
-function renderGuideStep(index, options = {}) {
-  const nextIndex = Math.max(0, Math.min(guideSteps.length - 1, index));
-  const step = guideSteps[nextIndex];
-  currentGuideStepIndex = nextIndex;
-  renderGuide(step.screen, step.target, options);
-}
-
-function renderGuideTarget(screenKey, targetKey) {
-  const index = guideStepIndex(screenKey, targetKey);
-  if (index >= 0) {
-    renderGuideStep(index);
-    return;
-  }
-  renderGuide(screenKey, targetKey);
-}
-
-function stepGuide(direction) {
-  const nextIndex = currentGuideStepIndex + direction;
-  if (nextIndex < 0 || nextIndex >= guideSteps.length) {
-    return false;
-  }
-  renderGuideStep(nextIndex);
-  return true;
-}
-
-if (interactiveGuide) {
-  interactiveGuide.addEventListener(
-    "wheel",
-    (event) => {
-      const verticalIntent = Math.abs(event.deltaY) >= Math.abs(event.deltaX);
-      if (!verticalIntent || !event.deltaY) {
-        return;
-      }
-
-      guideWheelDelta += event.deltaY;
-      const direction = guideWheelDelta > 0 ? 1 : -1;
-      const canStep = direction > 0
-        ? currentGuideStepIndex < guideSteps.length - 1
-        : currentGuideStepIndex > 0;
-
-      if (!canStep) {
-        guideWheelDelta = 0;
-        return;
-      }
-
-      event.preventDefault();
-      if (guideWheelLocked || Math.abs(guideWheelDelta) < 48) {
-        return;
-      }
-
-      guideWheelDelta = 0;
-      guideWheelLocked = true;
-      stepGuide(direction);
-      window.setTimeout(() => {
-        guideWheelLocked = false;
-      }, 360);
-    },
-    { passive: false },
-  );
-
-  interactiveGuide.addEventListener(
-    "touchstart",
-    (event) => {
-      if (isMobileGuideLayout()) {
-        return;
-      }
-      const touch = event.touches[0];
-      guideTouchStartY = touch.clientY;
-      guideTouchStartX = touch.clientX;
-    },
-    { passive: true },
-  );
-
-  interactiveGuide.addEventListener(
-    "touchmove",
-    (event) => {
-      if (isMobileGuideLayout()) {
-        return;
-      }
-      const touch = event.touches[0];
-      const deltaY = guideTouchStartY - touch.clientY;
-      const deltaX = guideTouchStartX - touch.clientX;
-
-      if (Math.abs(deltaY) < 48 || Math.abs(deltaY) < Math.abs(deltaX)) {
-        return;
-      }
-
-      const stepped = stepGuide(deltaY > 0 ? 1 : -1);
-      if (stepped) {
-        event.preventDefault();
-        guideTouchStartY = touch.clientY;
-        guideTouchStartX = touch.clientX;
-      }
-    },
-    { passive: false },
-  );
-
-  interactiveGuide.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowDown" || event.key === "PageDown") {
-      if (stepGuide(1)) {
-        event.preventDefault();
-      }
+    if (!response.ok) {
+      throw new Error(`GitHub Releases API ${response.status}`);
+    }
+    const latest = latestStableRelease(await response.json());
+    const asset = latest ? stableApkAsset(latest) : null;
+    if (!latest || !asset) {
+      throw new Error("Stable APK asset not found");
     }
 
-    if (event.key === "ArrowUp" || event.key === "PageUp") {
-      if (stepGuide(-1)) {
-        event.preventDefault();
-      }
+    const versionName = `${latest.tag_name.replace(/^v/, "")}-android`;
+    latestApkLink.href = asset.browser_download_url;
+    latestApkLink.textContent = "최신 APK 다운로드";
+    if (releaseVersion) {
+      releaseVersion.textContent = versionName;
     }
-  });
+    if (releaseSize) {
+      releaseSize.textContent = formatBytes(asset.size);
+    }
+    if (apkName) {
+      apkName.textContent = asset.name;
+    }
+    if (releaseStatus) {
+      releaseStatus.textContent = `최신 정식 릴리즈 ${latest.tag_name} · GitHub Releases에서 직접 다운로드`;
+    }
+  } catch (error) {
+    latestApkLink.href = fallbackUrl;
+    if (releaseStatus) {
+      releaseStatus.textContent = "릴리즈 정보를 불러오지 못하면 현재 확인된 최신 APK 또는 GitHub Releases로 이동합니다.";
+    }
+  }
 }
 
-document.addEventListener("click", (event) => {
-  const screenButton = event.target.closest("[data-guide-screen]");
-  if (screenButton) {
-    renderGuideStep(firstGuideStepIndex(screenButton.dataset.guideScreen));
-    return;
-  }
-
-  const modeChoice = event.target.closest("[data-extractor-mode]");
-  if (modeChoice) {
-    const nextMode = modeChoice.dataset.extractorMode;
-    extractorMode = nextMode === "video" ? "video" : "audio";
-    renderGuideTarget("extractor", extractorMode === "video" ? "extract-mode-video" : "extract-mode-audio");
-    return;
-  }
-
-  const hotspot = event.target.closest("[data-guide-hotspot]");
-  if (hotspot) {
-    renderGuideTarget(currentScreen, hotspot.dataset.guideHotspot);
-  }
-});
-
-if (phoneScreen) {
-  renderGuide(currentScreen, undefined, { instant: true });
-}
-
+renderGuideStack();
 loadLatestApkRelease();
