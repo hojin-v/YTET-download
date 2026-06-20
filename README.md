@@ -33,7 +33,8 @@ APK는 다운로드 페이지 repo에 직접 포함하지 않습니다. 최신 A
 ## Assets
 
 - `assets/RabbYT_logo_embedded.svg`: 원본 RabbYT 로고 SVG
-- `assets/rabbyt-og-image.svg`: 원본 로고를 활용한 링크 공유용 SVG
+- `assets/rabbyt-og-image.png`: 원본 로고를 활용한 링크 공유용 PNG
+- `assets/rabbyt-og-image.svg`: 원본 로고를 활용한 링크 공유용 SVG 원본
 - `assets/rabbyt-mask-icon.svg`: 원본 로고를 활용한 브라우저 mask icon SVG
 - `assets/lauv-cover.jpg`: Lauv `26` 예시 커버 이미지
 - `assets/youtube-playlist-lauv.png`: Lauv YouTube 플레이리스트 화면 캡처
