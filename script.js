@@ -1,6 +1,7 @@
 const guideStack = document.querySelector("[data-guide-stack]");
 const heroTabs = document.querySelectorAll("[data-hero-tab]");
 const heroPhones = document.querySelectorAll("[data-hero-phone]");
+const siteHeader = document.querySelector(".site-header");
 const latestApkLinks = document.querySelectorAll("[data-latest-apk-link]");
 const releaseStatus = document.querySelector("[data-release-status]");
 const releaseVersion = document.querySelector("[data-release-version]");
@@ -514,6 +515,44 @@ document.addEventListener("click", (event) => {
   }
 });
 
+function setupScrollEffects() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (siteHeader) {
+    const syncHeader = () => {
+      siteHeader.classList.toggle("is-scrolled", window.scrollY > 8);
+    };
+    syncHeader();
+    window.addEventListener("scroll", syncHeader, { passive: true });
+  }
+
+  const revealTargets = document.querySelectorAll(
+    ".download-section, .features, .workflow, .guide-card, .guide-step-card, .feature-grid article, .workflow-list li",
+  );
+  revealTargets.forEach((target) => target.classList.add("reveal-target"));
+
+  if (!("IntersectionObserver" in window)) {
+    revealTargets.forEach((target) => target.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
+  );
+
+  revealTargets.forEach((target) => observer.observe(target));
+}
+
 async function loadLatestApkRelease() {
   if (!latestApkLinks.length) {
     return;
@@ -568,4 +607,5 @@ async function loadLatestApkRelease() {
 
 setHeroPreview(document.querySelector("[data-hero-tab].active")?.dataset.heroTab || "stream");
 renderGuideStack();
+setupScrollEffects();
 loadLatestApkRelease();
