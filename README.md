@@ -35,6 +35,7 @@ APK는 다운로드 페이지 repo에 직접 포함하지 않습니다. 최신 A
 - `assets/RabbYT_logo_embedded.svg`: 원본 RabbYT 로고 SVG
 - `assets/rabbyt-og-image.png`: 원본 로고를 활용한 링크 공유용 PNG
 - `assets/rabbyt-og-image-20260620.png`: 카카오톡 등 링크 미리보기 캐시 갱신용 버전 PNG
+- `assets/rabbyt-share-logo-thumbnail-20260620.png`: 카카오톡에서 중앙 로고형으로 보이도록 고정한 링크 공유용 PNG
 - `assets/rabbyt-og-image.svg`: 원본 로고를 활용한 링크 공유용 SVG 원본
 - `assets/rabbyt-mask-icon.svg`: 원본 로고를 활용한 브라우저 mask icon SVG
 - `assets/lauv-cover.jpg`: Lauv `26` 예시 커버 이미지
