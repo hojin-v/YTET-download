@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">RabbYT share image</title>
+  <desc id="desc">RabbYT share image using the original embedded logo artwork.</desc>
+  <defs>
+    <radialGradient id="redGlow" cx="68%" cy="18%" r="58%">
+      <stop offset="0" stop-color="#ff2d35" stop-opacity=".42"/>
+      <stop offset=".48" stop-color="#ff2d35" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#ff2d35" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#17191f"/>
+      <stop offset=".58" stop-color="#050506"/>
+      <stop offset="1" stop-color="#101116"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="48" fill="url(#bg)"/>
+  <rect width="1200" height="630" rx="48" fill="url(#redGlow)"/>
+  <circle cx="882" cy="316" r="218" fill="#ff2d35" opacity=".08"/>
+  <image href="RabbYT_logo_embedded.svg" x="716" y="126" width="332" height="332" preserveAspectRatio="xMidYMid meet"/>
+  <text x="104" y="252" font-family="Inter, Arial, sans-serif" font-size="104" font-weight="900" letter-spacing="-4" fill="#fffaf3">Rabb<tspan fill="#ff2d35">YT</tspan></text>
+  <text x="112" y="318" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="760" fill="#e7eaf0">YouTube 링크를 음악처럼 듣고 저장하는 Android 플레이어</text>
+  <text x="112" y="382" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="700" fill="#a6adbb">Stream · Device Player · Extractor</text>
+  <path d="M112 455h182" stroke="#ff2d35" stroke-width="12" stroke-linecap="round"/>
+</svg>

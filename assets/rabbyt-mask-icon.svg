@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">RabbYT mask icon</title>
+  <desc id="desc">Simple RabbYT mask icon preserving the original logo silhouette placement.</desc>
+  <rect width="512" height="512" rx="112" fill="#050506"/>
+  <image href="RabbYT_logo_embedded.svg" x="42" y="42" width="428" height="428" preserveAspectRatio="xMidYMid meet"/>
+</svg>

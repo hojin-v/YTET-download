@@ -64,7 +64,7 @@ module.exports = async function latestApk(request, response) {
     const githubResponse = await fetch(RELEASES_API_URL, {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "YTET-download-page",
+        "User-Agent": "RabbYT-download-page",
       },
     });
     if (!githubResponse.ok) {

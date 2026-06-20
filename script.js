@@ -154,7 +154,7 @@ const guideData = {
         title: "저장 폴더",
         text: "기본 저장 위치를 쓰거나 Android 폴더 선택 화면에서 직접 고릅니다.",
         points: [
-          ["기본값", "음원은 Download/YTET/Music, 영상은 Download/YTET/Video에 저장됩니다."],
+          ["기본값", "음원은 Download/RabbYT/Music, 영상은 Download/RabbYT/Video에 저장됩니다."],
           ["사용자 지정", "원하는 폴더를 선택해 결과 파일을 저장합니다."],
           ["다시 기본값", "기본값 버튼으로 언제든 기본 저장 경로로 되돌립니다."],
         ],
@@ -366,7 +366,7 @@ function screenHtml(screenKey, activeTarget) {
   const isVideoMode = activeTarget === "extract-mode-video" || activeTarget === "extract-subtitles";
   const isAudioModeStep = activeTarget === "extract-mode-audio";
   const isVideoModeStep = activeTarget === "extract-mode-video";
-  const folderPath = isVideoMode ? "Download/YTET/Video" : "Download/YTET/Music";
+  const folderPath = isVideoMode ? "Download/RabbYT/Video" : "Download/RabbYT/Music";
 
   return `
     <div class="field-label">YouTube URL</div>
