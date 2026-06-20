@@ -965,7 +965,26 @@ dd {
 }
 
 .icon-grid::before {
-  box-shadow: 8px 0 0 -2px rgba(255, 255, 255, 0.58), 0 8px 0 -2px rgba(255, 255, 255, 0.58), 8px 8px 0 -2px rgba(255, 255, 255, 0.58);
+  inset: auto;
+  top: 8px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  border: 0;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.64);
+  box-shadow:
+    10px 0 0 rgba(255, 255, 255, 0.64),
+    0 10px 0 rgba(255, 255, 255, 0.64),
+    10px 10px 0 rgba(255, 255, 255, 0.64);
+}
+
+.icon-grid.active::before {
+  background: var(--red);
+  box-shadow:
+    10px 0 0 var(--red),
+    0 10px 0 var(--red),
+    10px 10px 0 var(--red);
 }
 
 .chip-row {
@@ -2120,75 +2139,78 @@ dd {
   }
 }
 
-/* Toss-inspired product refresh */
+/* Modern product refresh with the YTET app theme */
 :root {
-  color-scheme: light;
-  --bg: #f7f9fc;
-  --panel: #ffffff;
-  --panel-2: #f2f4f6;
-  --panel-3: #e9eef5;
-  --text: #191f28;
-  --muted: #6b7684;
-  --soft: #4e5968;
-  --red: #ff3d4f;
-  --red-dark: #e53144;
+  color-scheme: dark;
+  --bg: #050506;
+  --panel: #0f1014;
+  --panel-2: #17191f;
+  --panel-3: #22252d;
+  --text: #fffaf3;
+  --muted: #a6adbb;
+  --soft: #e7eaf0;
+  --red: #ff2d35;
+  --red-dark: #b80b17;
   --green: #00b894;
   --amber: #f5a623;
-  --blue: #3182f6;
-  --line: rgba(25, 31, 40, 0.1);
-  --line-strong: rgba(25, 31, 40, 0.18);
-  --shadow: 0 28px 80px rgba(49, 130, 246, 0.16);
+  --blue: #ff2d35;
+  --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.52);
 }
 
 body {
   background:
-    linear-gradient(180deg, #eef5ff 0, #f8fbff 420px, #ffffff 860px),
+    radial-gradient(circle at 78% 12%, rgba(255, 45, 53, 0.22), transparent 28%),
+    linear-gradient(180deg, rgba(255, 45, 53, 0.16), rgba(5, 5, 6, 0) 360px),
+    linear-gradient(180deg, #111217 0, #050506 58%, #090a0d 100%),
     var(--bg);
   color: var(--text);
 }
 
 .site-header {
-  border-bottom-color: rgba(25, 31, 40, 0.06);
-  background: rgba(255, 255, 255, 0.78);
+  border-bottom-color: rgba(255, 255, 255, 0.09);
+  background: rgba(5, 5, 6, 0.78);
   box-shadow: none;
 }
 
 .site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 10px 32px rgba(25, 31, 40, 0.08);
+  background: rgba(5, 5, 6, 0.92);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.32);
 }
 
 .brand img {
-  box-shadow: 0 12px 30px rgba(255, 61, 79, 0.18);
+  box-shadow: 0 12px 30px rgba(255, 45, 53, 0.24);
 }
 
 .nav-links {
-  color: #8b95a1;
+  color: #a6adbb;
 }
 
 .nav-links a:hover,
 .nav-links a:focus-visible {
-  color: var(--blue);
+  color: var(--red);
 }
 
 .hero {
   min-height: max(760px, calc(100vh - 70px));
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.98) 72%),
-    linear-gradient(120deg, rgba(49, 130, 246, 0.16), rgba(255, 61, 79, 0.08) 48%, rgba(0, 184, 148, 0.08));
+    radial-gradient(circle at 74% 18%, rgba(255, 45, 53, 0.2), transparent 32%),
+    linear-gradient(120deg, rgba(255, 45, 53, 0.2), rgba(5, 5, 6, 0.88) 48%, rgba(5, 5, 6, 0.98)),
+    #050506;
 }
 
 .hero::after {
-  background: linear-gradient(180deg, transparent, #fff);
+  background: linear-gradient(180deg, transparent, #050506);
 }
 
 .hero-bg::before {
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.72) 46%, rgba(255, 255, 255, 0.18) 100%),
+    linear-gradient(90deg, rgba(5, 5, 6, 0.96) 0%, rgba(5, 5, 6, 0.72) 46%, rgba(5, 5, 6, 0.18) 100%),
     repeating-linear-gradient(
       90deg,
-      rgba(49, 130, 246, 0.045) 0,
-      rgba(49, 130, 246, 0.045) 1px,
+      rgba(255, 255, 255, 0.045) 0,
+      rgba(255, 255, 255, 0.045) 1px,
       transparent 1px,
       transparent 84px
     );
@@ -2204,7 +2226,7 @@ body {
 }
 
 h1 {
-  color: #111827;
+  color: var(--text);
   text-shadow: none;
 }
 
@@ -2229,25 +2251,25 @@ h3 {
 }
 
 .button.primary {
-  background: var(--blue);
+  background: var(--red);
   color: #fff;
-  box-shadow: 0 18px 42px rgba(49, 130, 246, 0.24);
+  box-shadow: 0 18px 42px rgba(255, 45, 53, 0.28);
 }
 
 .button.ghost,
 .button.secondary {
-  border-color: rgba(49, 130, 246, 0.14);
-  background: rgba(49, 130, 246, 0.08);
-  color: #1b64da;
+  border-color: rgba(255, 45, 53, 0.22);
+  background: rgba(255, 45, 53, 0.1);
+  color: #ff6b72;
 }
 
 .hero-phone,
 .phone-shell {
-  border-color: rgba(25, 31, 40, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(244, 247, 251, 0.96)),
-    #fff;
-  box-shadow: 0 34px 88px rgba(25, 31, 40, 0.16);
+    linear-gradient(180deg, rgba(24, 26, 32, 0.96), rgba(10, 11, 14, 0.98)),
+    #0f1014;
+  box-shadow: 0 34px 88px rgba(0, 0, 0, 0.48);
 }
 
 .hero-phone {
@@ -2264,15 +2286,15 @@ h3 {
 
 .phone-status {
   background:
-    linear-gradient(90deg, rgba(25, 31, 40, 0.1), transparent 34%),
-    rgba(25, 31, 40, 0.04);
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12), transparent 34%),
+    rgba(255, 255, 255, 0.05);
 }
 
 .app-screen {
-  border-color: rgba(25, 31, 40, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 248, 251, 0.98)),
-    #fff;
+    linear-gradient(180deg, rgba(22, 24, 30, 0.96), rgba(8, 9, 12, 0.98)),
+    #0f1014;
 }
 
 .stream-card,
@@ -2288,14 +2310,14 @@ h3 {
 .icon-grid,
 .folder-row span,
 .mock-hotspot {
-  background: #f2f4f6;
+  background: #17191f;
 }
 
 .nav-bar,
 .bottom-tabs {
-  border-top-color: rgba(25, 31, 40, 0.08);
-  background: rgba(255, 255, 255, 0.94);
-  color: #8b95a1;
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(15, 16, 20, 0.94);
+  color: #a6adbb;
 }
 
 .nav-bar span.active,
@@ -2310,7 +2332,7 @@ h3 {
 }
 
 .chip-row .active {
-  background: rgba(49, 130, 246, 0.12);
+  background: rgba(255, 45, 53, 0.14);
 }
 
 .cta-preview,
@@ -2322,22 +2344,22 @@ h3 {
 
 .features,
 .guide {
-  background: #fff;
+  background: #050506;
 }
 
 .download-section,
 .workflow {
   border-block: 0;
-  background: #f6f8fb;
+  background: #090a0d;
 }
 
 .download-card,
 .feature-grid article,
 .workflow-list li,
 .guide-step-card {
-  border-color: rgba(25, 31, 40, 0.08);
-  background: #fff;
-  box-shadow: 0 18px 48px rgba(25, 31, 40, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(20, 22, 28, 0.96), rgba(12, 13, 17, 0.96));
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
 }
 
 .feature-grid article {
@@ -2346,11 +2368,11 @@ h3 {
 
 .feature-grid article:hover {
   transform: translateY(-5px);
-  box-shadow: 0 28px 70px rgba(25, 31, 40, 0.12);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
 }
 
 .feature-grid article::before {
-  background: linear-gradient(90deg, var(--blue), rgba(49, 130, 246, 0));
+  background: linear-gradient(90deg, var(--red), rgba(255, 45, 53, 0));
 }
 
 .feature-kicker.red,
@@ -2361,16 +2383,16 @@ h3 {
 }
 
 .release-strip {
-  border-color: rgba(25, 31, 40, 0.08);
-  background: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #111217;
 }
 
 .release-strip div {
-  border-right-color: rgba(25, 31, 40, 0.08);
+  border-right-color: rgba(255, 255, 255, 0.1);
 }
 
 dt {
-  color: #8b95a1;
+  color: #a6adbb;
 }
 
 dd {
@@ -2382,13 +2404,13 @@ dd {
 }
 
 .guide-step-card::before {
-  background: linear-gradient(90deg, transparent, rgba(49, 130, 246, 0.32), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 45, 53, 0.32), transparent);
 }
 
 .guide-points li,
 .guide-example {
-  border-color: rgba(25, 31, 40, 0.08);
-  background: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #111217;
 }
 
 .guide-points span,
@@ -2397,18 +2419,18 @@ dd {
 }
 
 .download-item {
-  background: #fff;
+  background: #111217;
 }
 
 .download-item.install-target::after,
 .android-dialog .install-button::after {
-  border-color: var(--blue);
-  box-shadow: 0 14px 28px rgba(49, 130, 246, 0.22);
+  border-color: var(--red);
+  box-shadow: 0 14px 28px rgba(255, 45, 53, 0.24);
 }
 
 .android-dialog {
-  background: #fff;
-  box-shadow: 0 20px 44px rgba(25, 31, 40, 0.08);
+  background: #17191f;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.36);
 }
 
 .android-dialog button {
@@ -2417,15 +2439,27 @@ dd {
 
 .icon-dot::before,
 .icon-grid::before {
-  border-color: rgba(25, 31, 40, 0.5);
+  border-color: rgba(255, 255, 255, 0.62);
 }
 
 .icon-dot::after {
-  background: rgba(25, 31, 40, 0.5);
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .icon-grid::before {
-  box-shadow: 8px 0 0 -2px rgba(25, 31, 40, 0.5), 0 8px 0 -2px rgba(25, 31, 40, 0.5), 8px 8px 0 -2px rgba(25, 31, 40, 0.5);
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow:
+    10px 0 0 rgba(255, 255, 255, 0.62),
+    0 10px 0 rgba(255, 255, 255, 0.62),
+    10px 10px 0 rgba(255, 255, 255, 0.62);
+}
+
+.icon-grid.active::before {
+  background: var(--red);
+  box-shadow:
+    10px 0 0 var(--red),
+    0 10px 0 var(--red),
+    10px 10px 0 var(--red);
 }
 
 .input-preview.active,
@@ -2439,24 +2473,24 @@ dd {
 .chip-row.active,
 .radio-row span.target-active,
 .mock-primary.active {
-  border-color: rgba(49, 130, 246, 0.72);
-  box-shadow: inset 0 0 0 1px rgba(49, 130, 246, 0.2), 0 12px 28px rgba(49, 130, 246, 0.12);
+  border-color: rgba(255, 45, 53, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(255, 45, 53, 0.2), 0 12px 28px rgba(255, 45, 53, 0.14);
 }
 
 .radio-row span.target-active,
 .check-row.active,
 .chip-row.active {
-  background: rgba(49, 130, 246, 0.1);
+  background: rgba(255, 45, 53, 0.12);
 }
 
 .browser-shot {
-  border-color: rgba(25, 31, 40, 0.08);
-  background: #f7f9fc;
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #111217;
 }
 
 .browser-bar {
-  background: #fff;
-  color: #8b95a1;
+  background: #17191f;
+  color: #a6adbb;
 }
 
 .reveal-target {
@@ -2511,18 +2545,19 @@ dd {
 @media (max-width: 760px) {
   .hero {
     background:
-      linear-gradient(180deg, #eef5ff 0, #fff 72%),
-      #fff;
+      radial-gradient(circle at 50% 6%, rgba(255, 45, 53, 0.2), transparent 34%),
+      linear-gradient(180deg, #111217 0, #050506 72%),
+      #050506;
   }
 
   .hero-switcher {
-    background: #fff;
-    box-shadow: 0 12px 36px rgba(25, 31, 40, 0.08);
+    background: #111217;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32);
   }
 
   .hero-switcher button.active {
     border-color: transparent;
-    background: var(--blue);
+    background: var(--red);
     color: #fff;
   }
 
