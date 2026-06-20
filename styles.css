@@ -1493,7 +1493,6 @@ dd {
 }
 
 .input-preview.active,
-.radio-row.active,
 .check-row.active,
 .folder-row.active,
 .library-row.active,
@@ -1502,9 +1501,14 @@ dd {
 .icon-dot.active,
 .icon-grid.active,
 .chip-row.active,
+.radio-row span.target-active,
 .mock-primary.active {
   border-color: rgba(255, 45, 53, 0.86);
   box-shadow: inset 0 0 0 1px rgba(255, 45, 53, 0.3), 0 10px 24px rgba(255, 45, 53, 0.14);
+}
+
+.radio-row span.target-active {
+  background: rgba(255, 45, 53, 0.12);
 }
 
 .select-preview.active-soft,
@@ -1554,9 +1558,14 @@ dd {
   font-weight: 850;
 }
 
-.screen-toolbar span {
-  flex: 0 0 auto;
+.screen-toolbar .icon-dot,
+.screen-toolbar .icon-grid {
+  flex: 0 0 34px;
   border: 1px solid transparent;
+}
+
+.screen-toolbar .icon-dot {
+  margin-left: auto;
 }
 
 .chip-row.mock-clickable {

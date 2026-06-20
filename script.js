@@ -60,10 +60,10 @@ const guideData = {
       },
       "library-actions": {
         title: "검색과 보기",
-        text: "상단 도구 버튼으로 음악을 찾거나 보기 방식을 바꿀 수 있습니다.",
+        text: "상단 우측의 검색/보기 아이콘으로 음악을 찾거나 보기 방식을 바꿀 수 있습니다.",
         points: [
-          ["검색", "제목, 아티스트, 앨범 기준으로 빠르게 찾습니다."],
-          ["보기 전환", "목록형과 카드형을 상황에 맞게 전환합니다."],
+          ["검색", "우측 검색 아이콘으로 제목, 아티스트, 앨범 기준 검색을 시작합니다."],
+          ["보기 전환", "검색 옆 보기 아이콘으로 목록형과 카드형을 전환합니다."],
           ["정렬", "최신순, 이름순, 재생 횟수 기준으로 정렬할 수 있습니다."],
         ],
       },
@@ -327,21 +327,21 @@ function screenHtml(screenKey, activeTarget) {
         <span>아티스트</span>
         <span>재생목록</span>
       </div>
-      <div class="library-row ${activeTarget === "library-player" ? "active" : ""}">
+      <div class="library-row">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>26</strong>
           <small>Lauv · All 4 Nothing</small>
         </span>
       </div>
-      <div class="library-row ${activeTarget === "library-player" ? "active-soft" : ""}">
+      <div class="library-row">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>Stranger</strong>
           <small>Lauv · All 4 Nothing</small>
         </span>
       </div>
-      <div class="library-row ${activeTarget === "library-player" ? "active-soft" : ""}">
+      <div class="library-row">
         <span class="cover lauv-cover"></span>
         <span class="mock-copy">
           <strong>Kids Are Born Stars</strong>
@@ -361,7 +361,8 @@ function screenHtml(screenKey, activeTarget) {
   }
 
   const isVideoMode = activeTarget === "extract-mode-video" || activeTarget === "extract-subtitles";
-  const modeActive = activeTarget === "extract-mode-audio" || activeTarget === "extract-mode-video";
+  const isAudioModeStep = activeTarget === "extract-mode-audio";
+  const isVideoModeStep = activeTarget === "extract-mode-video";
   const folderPath = isVideoMode ? "Download/YTET/Video" : "Download/YTET/Music";
 
   return `
@@ -370,12 +371,12 @@ function screenHtml(screenKey, activeTarget) {
       https://youtu.be/6Yf4tPL6_Xw
     </div>
     <div class="field-label">모드</div>
-    <div class="radio-row ${modeActive ? "active" : ""}">
-      <span class="${!isVideoMode ? "selected" : ""}">음원</span>
-      <span class="${isVideoMode ? "selected" : ""}">영상</span>
+    <div class="radio-row">
+      <span class="${!isVideoMode ? "selected" : ""} ${isAudioModeStep ? "target-active" : ""}">음원</span>
+      <span class="${isVideoMode ? "selected" : ""} ${isVideoModeStep ? "target-active" : ""}">영상</span>
     </div>
     <div class="field-label">포맷 / 품질</div>
-    <div class="select-preview ${modeActive ? "active-soft" : ""}">
+    <div class="select-preview">
       ${isVideoMode ? "원본 최고품질 (MKV)" : "M4A (AAC)"}
     </div>
     ${
